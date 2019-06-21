@@ -27,17 +27,16 @@ public class CatalogResource {
     WebClient.Builder webClientBuilder;
 
     @RequestMapping("/{userId}")
-    public List<CatalogItem> getCatalog(@PathVariable("userId") String userId) {
+    public UserRating getCatalog(@PathVariable("userId") String userId) {
 
-        UserRating userRating = restTemplate.getForObject("http://localhost:8083/ratingsdata/user/" + userId, UserRating.class);
+        UserRating userRating = restTemplate.getForObject("http://10.0.170.52:8080/ratingsdata/user/" + userId, UserRating.class);
+        return userRating;
+    }
+    @RequestMapping("/external/{userId}")
+    public UserRating getCatalog1(@PathVariable("userId") String userId) {
 
-        return userRating.getRatings().stream()
-                .map(rating -> {
-                    Movie movie = restTemplate.getForObject("http://localhost:8082/movies/" + rating.getMovieId(), Movie.class);
-                    return new CatalogItem(movie.getName(), "Description", rating.getRating());
-                })
-                .collect(Collectors.toList());
-
+        UserRating userRating = restTemplate.getForObject("http://52.172.39.134/ratingsdata/user/" + userId, UserRating.class);
+        return userRating;
     }
 }
 
